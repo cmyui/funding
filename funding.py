@@ -91,14 +91,14 @@ if __name__ == "__main__":
         "-balance",
         help="The starting balance of your savings fund.",
         type=float,
-        required=True,
+        default=0.0,
     )
 
     parser.add_argument(
         "-monthly",
         help="The amount you're able to dedicate to your savings fund on a monthly basis.",
         type=float,
-        required=True,
+        default=0.0,
     )
 
     args = parser.parse_args()
