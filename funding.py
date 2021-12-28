@@ -6,6 +6,8 @@ from typing import TypedDict
 
 import history
 
+__all__ = ("AnalysisResults", "do_analysis")
+
 
 class AnalysisResults(TypedDict):
     ending_balance: float
@@ -13,8 +15,8 @@ class AnalysisResults(TypedDict):
 
 
 def do_analysis(
-    current_date: datetime.date,
-    ending_date: datetime.date,
+    start_date: datetime.date,
+    end_date: datetime.date,
     current_balance: float,
     monthly_addition: float,
 ) -> AnalysisResults:
@@ -24,7 +26,7 @@ def do_analysis(
 
     current_inflation = 1.0
 
-    while current_date <= ending_date:
+    while start_date <= end_date:
         # add income from the existing funds in the s&p500 etf
         # TODO: it would be ideal to do s&p500 contributions more spread out
         # to represent reality better, you wouldn't be immediately putting your
@@ -39,20 +41,23 @@ def do_analysis(
 
         # TODO: tax deductions? or could do it per year
 
-        current_date += time_per_iteration
+        start_date += time_per_iteration
 
     return {"ending_balance": current_balance, "ending_inflation": current_inflation}
 
 
 def main(
-    starting_date: datetime.date,
-    ending_date: datetime.date,
+    start_date: datetime.date,
+    end_date: datetime.date,
     starting_balance: float,
     monthly_addition: float,
 ) -> int:
     """Print out the future estimated gains over the timespan."""
     results = do_analysis(
-        starting_date, ending_date, starting_balance, monthly_addition
+        start_date,
+        end_date,
+        starting_balance,
+        monthly_addition,
     )
 
     new_balance = results["ending_balance"] / results["ending_inflation"]
