@@ -17,11 +17,11 @@ class AnalysisResults(TypedDict):
 def do_analysis(
     start_date: datetime.date,
     end_date: datetime.date,
-    current_balance: float,
-    monthly_addition: float,
+    starting_balance: float,
+    monthly_contributions: float,
 ) -> AnalysisResults:
     """Perform an monetary analysis over a specified date range."""
-    daily_addition = monthly_addition / 30.436875  # avg num of days per month lol
+    daily_addition = monthly_contributions / 30.436875  # avg num of days per month lol
     time_per_iteration = datetime.timedelta(days=1)
 
     current_inflation = 1.0
@@ -31,10 +31,10 @@ def do_analysis(
         # TODO: it would be ideal to do s&p500 contributions more spread out
         # to represent reality better, you wouldn't be immediately putting your
         # money in, but rather buying it once in a while (preferrably on dips).
-        current_balance *= 1 + history.average_daily_sp500_increase
+        starting_balance *= 1 + history.average_daily_sp500_increase
 
         # add income from your salary
-        current_balance += daily_addition
+        starting_balance += daily_addition
 
         # keep track of inflation relative to our gains
         current_inflation *= 1 + history.average_daily_inflation_increase
@@ -43,7 +43,7 @@ def do_analysis(
 
         start_date += time_per_iteration
 
-    return {"ending_balance": current_balance, "ending_inflation": current_inflation}
+    return {"ending_balance": starting_balance, "ending_inflation": current_inflation}
 
 
 def main(
