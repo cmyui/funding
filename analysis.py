@@ -4,7 +4,7 @@ import argparse
 import datetime
 from typing import TypedDict
 
-import history
+from . import history
 
 __all__ = ("AnalysisResults", "do_analysis")
 
